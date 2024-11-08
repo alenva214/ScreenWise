@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaderboard</title>
+    <!-- Frameworks and Libraries -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+    <style>
+        #particles-js {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(45deg, #1a1c2c, #4a2c4c, #2c4a4a);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50% }
+            50% { background-position: 100% 50% }
+            100% { background-position: 0% 50% }
+        }
+
+        .leaderboard-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .avatar-container {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .avatar-container:hover {
+            transform: scale(1.1);
+        }
+        .zen-coin {
+          position: absolute;
+      	  width: 30px;
+      	  height: 30px;
+          background: #FFD700;
+          border-radius: 50%;
+          animation: coinFall 2s linear infinite;
+      opacity: 0;
+    }
+        @keyframes coinFall {
+      0% {
+        transform: translateY(-100vh) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+        .avatar-container::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                45deg,
+                transparent,
+                rgba(255, 255, 255, 0.1),
+                transparent
+            );
+            transform: rotate(45deg);
+            animation: shine 3s infinite;
+        }
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            display: flex;
+            align-items: center;
+            padding: 10px 15px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-family: Arial, sans-serif;
+            z-index: 10;
+            text-decoration: none;
+        }
+
+        .back-button:hover {
+            background-color: #555;
+        }
+
+        /* Arrow icon */
+        .back-button::before {
+            content: "←";
+            font-size: 18px;
+            margin-right: 8px;
+        }
+        @keyframes shine {
+            0% { transform: translateX(-100%) rotate(45deg) }
+            100% { transform: translateX(100%) rotate(45deg) }
+        }
+
+        .rank-badge {
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            padding: 8px;
+            border-radius: 50%;
+            font-weight: bold;
+            z-index: 10;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .rank-1 {
+            background: linear-gradient(45deg, #FFD700, #FFA500);
+            animation: pulse-gold 2s infinite;
+        }
+
+        .rank-2 {
+            background: linear-gradient(45deg, #C0C0C0, #E8E8E8);
+            animation: pulse-silver 2s infinite;
+        }
+
+        .rank-3 {
+            background: linear-gradient(45deg, #CD7F32, #B87333);
+            animation: pulse-bronze 2s infinite;
+        }
+
+        @keyframes pulse-gold {
+            0% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.4) }
+            70% { box-shadow: 0 0 0 10px rgba(255, 215, 0, 0) }
+            100% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0) }
+        }
+
+        @keyframes pulse-silver {
+            0% { box-shadow: 0 0 0 0 rgba(192, 192, 192, 0.4) }
+            70% { box-shadow: 0 0 0 10px rgba(192, 192, 192, 0) }
+            100% { box-shadow: 0 0 0 0 rgba(192, 192, 192, 0) }
+        }
+
+        @keyframes pulse-bronze {
+            0% { box-shadow: 0 0 0 0 rgba(205, 127, 50, 0.4) }
+            70% { box-shadow: 0 0 0 10px rgba(205, 127, 50, 0) }
+            100% { box-shadow: 0 0 0 0 rgba(205, 127, 50, 0) }
+        }
+
+        .time-badge {
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .time-badge:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body class="min-h-screen text-white">
+    <div id="particles-js"></div>
+
+    <div class="container mx-auto p-8 relative">
+        <!-- Header Section -->
+        <div class="text-center mb-12 animate__animated animate__fadeInDown">
+            <h1 class="text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-600">
+                Top Players Leaderboard
+            </h1>
+            <p class="text-xl text-gray-300">Competing for the longest screen time reduced</p>
+            <button class="back-button" onclick="goBack()">Back</button>
+        </div>
+
+        <!-- Leaderboard Section -->
+        <div class="grid gap-6" id="leaderboard-container">
+            <!-- Cards will be inserted here by JavaScript -->
+        </div>
+    </div>
+
+    <script>
+        // Sample user data
+        const users = [
+            { id: 1, name: "Ashwin R P", screenTime: 285, gender: "male", avatar: "/api/placeholder/150/150" },
+            { id: 2, name: "Abin", screenTime: 270, gender: "male", avatar: "/api/placeholder/150/150" },
+            { id: 3, name: "Alvin", screenTime: 260, gender: "male", avatar: "/api/placeholder/150/150" },
+            { id: 4, name: "Adithya", screenTime: 250, gender: "male", avatar: "/api/placeholder/150/150" },
+            { id: 5, name: "Anwin", screenTime: 240, gender: "male", avatar: "/api/placeholder/150/150" },
+            { id: 6, name: "Vishnu", screenTime: 230, gender: "male", avatar: "/api/placeholder/150/150" },
+            { id: 7, name: "Sharlet", screenTime: 220, gender: "male", avatar: "/api/placeholder/150/150" },
+            { id: 8, name: "Aravind", screenTime: 210, gender: "male", avatar: "/api/placeholder/150/150" },
+            { id: 9, name: "Alok", screenTime: 200, gender: "male", avatar: "/api/placeholder/150/150" },
+            { id: 10, name: "Jamie", screenTime: 190, gender: "male", avatar: "/api/placeholder/150/150" },
+            { id: 11, name: "Brie Larson", screenTime: 180, gender: "female", avatar: "/api/placeholder/150/150" },
+            { id: 12, name: "Mark Ruffalo", screenTime: 170, gender: "male", avatar: "/api/placeholder/150/150" },
+            { id: 13, name: "Karen Gillan", screenTime: 160, gender: "female", avatar: "/api/placeholder/150/150" },
+            { id: 14, name: "Paul Rudd", screenTime: 150, gender: "male", avatar: "/api/placeholder/150/150" },
+            { id: 15, name: "Zendaya", screenTime: 140, gender: "female", avatar: "/api/placeholder/150/150" }
+        ];
+        function goBack() {
+            window.location.href = "/dashboard"; // Replace with the desired URL
+        }
+        // Initialize particles.js
+        particlesJS('particles-js', {
+            particles: {
+                number: { value: 80, density: { enable: true, value_area: 800 } },
+                color: { value: '#ffffff' },
+                shape: { type: 'circle' },
+                opacity: { value: 0.5, random: false },
+                size: { value: 3, random: true },
+                line_linked: {
+                    enable: true,
+                    distance: 150,
+                    color: '#ffffff',
+                    opacity: 0.4,
+                    width: 1
+                },
+                move: {
+                    enable: true,
+                    speed: 2,
+                    direction: 'none',
+                    random: false,
+                    straight: false,
+                    out_mode: 'out',
+                    bounce: false,
+                }
+            },
+            interactivity: {
+                detect_on: 'canvas',
+                events: {
+                    onhover: { enable: true, mode: 'repulse' },
+                    onclick: { enable: true, mode: 'push' },
+                    resize: true
+                }
+            }
+        });
+          function createZenCoin() {
+        const coin = document.createElement('div');
+        coin.className = 'zen-coin';
+        
+        // Start at a random horizontal position
+        coin.style.left = Math.random() * window.innerWidth + 'px';
+        
+        // Start at a random vertical position within the viewport
+        coin.style.top = Math.random() * window.innerHeight / 2 + 'px';
+        
+        document.body.appendChild(coin);
+        
+        // Remove the coin once the animation ends
+        coin.addEventListener('animationend', () => {
+            coin.remove();
+        });
+    }
+
+    // Create coins periodically at a constant rate
+    setInterval(createZenCoin, 5000);
+        // Format screen time
+        function formatScreenTime(minutes) {
+            const hours = Math.floor(minutes / 60);
+            const mins = minutes % 60;
+            return `${hours}h ${mins}m`;
+        }
+
+        // Get rank badge class
+        function getRankBadgeClass(rank) {
+            if (rank === 1) return 'rank-1';
+            if (rank === 2) return 'rank-2';
+            if (rank === 3) return 'rank-3';
+            return 'bg-gray-800';
+        }
+
+        // Render leaderboard
+        function renderLeaderboard() {
+            const container = document.getElementById('leaderboard-container');
+            const topUsers = users
+                .sort((a, b) => b.screenTime - a.screenTime)
+                .slice(0, 10);
+
+            container.innerHTML = topUsers.map((user, index) => `
+                <div class="leaderboard-card rounded-xl p-6 relative animate__animated animate__fadeInUp" 
+                     style="animation-delay: ${index * 0.1}s">
+                    <div class="rank-badge ${getRankBadgeClass(index + 1)}">
+                        ${index + 1}
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-4">
+                            <div class="avatar-container w-16 h-16 rounded-full">
+                                <img src="/public/main.png" alt="${user.name}" 
+                                     class="w-full h-full object-cover rounded-full">
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold">${user.name}</h3>
+                                <span class="text-gray-400">${user.gender}</span>
+                            </div>
+                        </div>
+                        <div class="time-badge px-6 py-3 rounded-full">
+                            <i class="fas fa-clock mr-2"></i>
+                            ${formatScreenTime(user.screenTime)}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            // Add hover animations
+            gsap.utils.toArray('.leaderboard-card').forEach(card => {
+                card.addEventListener('mouseenter', () => {
+                    gsap.to(card, {
+                        scale: 1.02,
+                        duration: 0.3,
+                        ease: 'power2.out'
+                    });
+                });
+
+                card.addEventListener('mouseleave', () => {
+                    gsap.to(card, {
+                        scale: 1,
+                        duration: 0.3,
+                        ease: 'power2.out'
+                    });
+                });
+            });
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            renderLeaderboard();
+
+            // Add scroll animations
+            gsap.from('.leaderboard-card', {
+                scrollTrigger: {
+                    trigger: '.leaderboard-card',
+                    start: 'top 80%',
+                    toggleActions: 'play none none reverse'
+                },
+                y: 100,
+                opacity: 0,
+                duration: 1,
+                stagger: 0.2
+            });
+        });
+    </script>
+</body>
+</html>

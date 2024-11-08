@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Quests</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+
+    <style>
+        #particles-js {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(to right bottom, #1a1c2c, #4a2c4c);
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .zen-coin {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .quest-card {
+            transition: all 0.3s ease;
+        }
+
+        .quest-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .completion-message {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1000;
+            display: none;
+        }
+    </style>
+</head>
+<body class="min-h-screen text-white">
+    <div id="particles-js"></div>
+
+    <div class="container mx-auto p-8 relative">
+        <!-- Header Section -->
+        <div class="flex justify-between items-center mb-8 animate__animated animate__fadeInDown">
+            <h1 class="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-600">
+                Daily Quests
+            </h1>
+		 <button onclick="redirectToPage()"> Back To Dashboard</button>
+
+    <script>
+        // JavaScript function to redirect to a new URL
+        function redirectToPage() {
+            window.location.href = "/dashboard";
+        }
+    </script>
+            <div class="flex items-center space-x-4">
+                <div id="token-container" class="flex items-center space-x-2 bg-opacity-50 bg-black p-4 rounded-lg">
+                    <div class="zen-coin">
+                        <i class="fas fa-coins text-yellow-400 text-2xl"></i>
+                    </div>
+                    <span id="token-balance" class="text-xl font-bold">1000 Zen</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Completion Message -->
+        <div id="completion-message" class="completion-message bg-green-500 text-white p-6 rounded-xl animate__animated">
+            <h2 class="text-2xl font-bold">Quest Completed! 🎉</h2>
+            <p class="mt-2">+50 Zen tokens awarded!</p>
+        </div>
+
+        <!-- Quests Grid -->
+        <div id="quests-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Quests will be dynamically inserted here -->
+        </div>
+    </div>
+
+    <script>
+        // Initialize particles.js
+        particlesJS('particles-js', {
+            particles: {
+                number: { value: 80, density: { enable: true, value_area: 800 } },
+                color: { value: '#ffffff' },
+                shape: { type: 'circle' },
+                opacity: { value: 0.5, random: false },
+                size: { value: 3, random: true },
+                line_linked: {
+                    enable: true,
+                    distance: 150,
+                    color: '#ffffff',
+                    opacity: 0.4,
+                    width: 1
+                },
+                move: {
+                    enable: true,
+                    speed: 2,
+                    direction: 'none',
+                    random: false,
+                    straight: false,
+                    out_mode: 'out',
+                    bounce: false,
+                }
+            },
+            interactivity: {
+                detect_on: 'canvas',
+                events: {
+                    onhover: { enable: true, mode: 'repulse' },
+                    onclick: { enable: true, mode: 'push' },
+                    resize: true
+                }
+            },
+            retina_detect: true
+        });
+
+        // Quest data
+       // Quest data with completion tracking
+    // Quest data with completion tracking
+const allQuests = [
+    { id: 1, name: "Screen Time Guardian", description: "Reduce screen time by 30 minutes", timeReward: 30, tokens: 50, icon: "fa-mobile-screen", completed: false },
+    { id: 2, name: "Plant Whisperer", description: "Water a plant and care for it", timeReward: 10, tokens: 50, icon: "fa-seedling", completed: false },
+    { id: 3, name: "Meditation Master", description: "Complete a 15-minute meditation session", timeReward: 15, tokens: 50, icon: "fa-peace", completed: false },
+    { id: 4, name: "Reading Champion", description: "Read a book for 20 minutes", timeReward: 20, tokens: 50, icon: "fa-book-open", completed: false },
+    { id: 5, name: "Exercise Explorer", description: "Do a 10-minute workout", timeReward: 10, tokens: 50, icon: "fa-dumbbell", completed: false },
+    { id: 6, name: "Nature Navigator", description: "Take a 15-minute walk outside", timeReward: 15, tokens: 50, icon: "fa-tree", completed: false },
+    { id: 7, name: "Digital Detox", description: "Stay off social media for 1 hour", timeReward: 60, tokens: 50, icon: "fa-ban", completed: false },
+    { id: 8, name: "Mindful Moments", description: "Practice mindfulness for 5 minutes", timeReward: 5, tokens: 50, icon: "fa-brain", completed: false },
+    { id: 9, name: "Sleep Schedule", description: "Go to bed 30 minutes earlier", timeReward: 30, tokens: 50, icon: "fa-moon", completed: false },
+    { id: 10, name: "Hydration Hero", description: "Drink 8 glasses of water today", timeReward: 10, tokens: 50, icon: "fa-glass-water", completed: false }
+];
+
+// Get 5 random quests
+const randomQuests = allQuests.sort(() => 0.5 - Math.random()).slice(0, 6);
+
+let completedCount = 0;
+
+// Function to create quest cards
+function createQuestCards() {
+    const container = document.getElementById('quests-container');
+    container.innerHTML = ''; // Clear existing cards
+    
+    randomQuests.forEach((quest, index) => {
+        const card = document.createElement('div');
+        card.className = 'quest-card card p-6 rounded-xl animate__animated animate__fadeInUp';
+        card.style.animationDelay = `${index * 0.2}s`;
+        
+        const buttonState = quest.completed 
+            ? 'bg-green-600 cursor-not-allowed" disabled'
+            : 'bg-purple-600 hover:bg-purple-700"';
+        
+        const buttonText = quest.completed ? 'Completed!' : 'Start Quest';
+        
+        card.innerHTML = `
+            <div class="flex flex-col items-center text-center h-full">
+                <i class="fas ${quest.icon} text-4xl mb-4 text-purple-400"></i>
+                <h3 class="text-xl font-bold mb-2">${quest.name}</h3>
+                <p class="text-gray-300 mb-4">${quest.description}</p>
+                <div class="mt-auto">
+                    <p class="text-sm text-gray-400 mb-2">Rewards:</p>
+                    <div class="flex justify-center space-x-4">
+                        <span><i class="fas fa-clock text-blue-400"></i> ${quest.timeReward}min</span>
+                        <span><i class="fas fa-coins text-yellow-400"></i> ${quest.tokens} Zen</span>
+                    </div>
+                    <button onclick="startQuest(${quest.id})" 
+                            class="mt-4 px-6 py-2 rounded-full transition-colors ${buttonState}">
+                        ${buttonText}
+                    </button>
+                </div>
+            </div>
+        `;
+        container.appendChild(card);
+    });
+}
+
+function startQuest(questId) {
+    const quest = randomQuests.find(q => q.id === questId);
+    if (quest.completed) return;
+    
+    const button = event.target;
+    button.disabled = true;
+    button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> In Progress...';
+
+    setTimeout(() => {
+        // Show completion message
+        const message = document.getElementById('completion-message');
+        message.style.display = 'block';
+        message.classList.add('animate__fadeIn');
+
+        // Mark quest as completed
+        quest.completed = true;
+        completedCount++;
+
+        // Animate token increase with fixed values
+        const tokenBalance = document.getElementById('token-balance');
+        let newValue;
+        switch(completedCount) {
+            case 1: newValue = 1050; break;
+            case 2: newValue = 1100; break;
+            case 3: newValue = 1150; break;
+            case 4: newValue = 1200; break;
+            case 5: newValue = 1250; break;
+            default: newValue = 1000;
+        }
+
+        gsap.to(tokenBalance, {
+            textContent: newValue,
+            duration: 2,
+            snap: { textContent: 1 },
+            onUpdate: function() {
+                tokenBalance.textContent = Math.round(this.targets()[0].textContent) + " Zen";
+            }
+        });
+
+        // Create floating coins animation
+        const tokenContainer = document.getElementById('token-container');
+        for (let i = 0; i < 6; i++) {
+            const coin = document.createElement('i');
+            coin.className = 'fas fa-coins text-yellow-400 absolute';
+            coin.style.cssText = `
+                left: ${86 + Math.random() * 10}%;
+                top: 100%;
+                font-size: 1.5rem;
+                pointer-events: none;
+                z-index: 1000;
+            `;
+            tokenContainer.appendChild(coin);
+
+            gsap.to(coin, {
+                y: -100 - Math.random() * 50,
+                x: Math.random() * 100 - 50,
+                opacity: 0,
+                duration: 1 + Math.random(),
+                ease: "power1.out",
+                onComplete: () => coin.remove()
+            });
+        }
+
+        // Hide message after 2 seconds
+        setTimeout(() => {
+            message.classList.remove('animate__fadeIn');
+            message.classList.add('animate__fadeOut');
+            setTimeout(() => {
+                message.style.display = 'none';
+                message.classList.remove('animate__fadeOut');
+                button.innerHTML = 'Completed!';
+                button.classList.remove('bg-purple-600', 'hover:bg-purple-700');
+                button.classList.add('bg-green-600', 'cursor-not-allowed');
+            }, 1000);
+        }, 2000);
+    }, 3000);
+}
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', () => {
+    const tokenBalance = document.getElementById('token-balance');
+    tokenBalance.textContent = "1000 Zen";
+    createQuestCards();
+});
+  </script>
+</body>
+</html>

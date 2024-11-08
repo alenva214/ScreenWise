@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced Dashboard</title>
+    <!-- Include necessary CDN libraries -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+
+    <style>
+        #particles-js {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(to right bottom, #1a1c2c, #4a2c4c);
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .zen-coin {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .glow {
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from {
+                box-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #e60073;
+            }
+            to {
+                box-shadow: 0 0 20px #fff, 0 0 30px #ff4da6, 0 0 40px #ff4da6;
+            }
+        }
+
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+
+        .card-hover:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 30px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body class="min-h-screen text-white">
+    <div id="particles-js"></div>
+
+    <div class="container mx-auto p-8 relative">
+        <!-- Header Section -->
+        <div class="flex justify-between items-center mb-8 animate__animated animate__fadeInDown">
+            <h1 class="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-600">
+                Dashboard
+            </h1>
+            <div class="flex items-center space-x-4">
+                <div id="token-container" class="flex items-center space-x-2 bg-opacity-50 bg-black p-4 rounded-lg">
+                    <div class="zen-coin">
+                        <i class="fas fa-coins text-yellow-400 text-2xl"></i>
+                    </div>
+                    <span id="token-balance" class="text-xl font-bold"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Usage Table -->
+        <div class="card mb-8 rounded-xl p-6 animate__animated animate__fadeInUp">
+            <table class="w-full">
+                <thead>
+                    <tr class="text-gray-200">
+                        <th class="p-4 text-left">Week</th>
+                        <th class="p-4 text-left">Minutes Used</th>
+                    </tr>
+                </thead>
+                <tbody id="usage-details"></tbody>
+            </table>
+        </div>
+
+        <!-- Cards Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div id="leaderboard-card" class="card card-hover p-6 rounded-xl animate__animated animate__fadeInUp">
+                <div class="flex flex-col items-center text-center">
+                    <i class="fas fa-trophy text-4xl mb-4 text-yellow-400"></i>
+                    <h3 class="text-xl font-bold mb-2">Leaderboard</h3>
+                    <p class="text-gray-300">Compete with top players</p>
+                </div>
+            </div>
+
+            <div id="marketplace-card" class="card card-hover p-6 rounded-xl animate__animated animate__fadeInUp" style="animation-delay: 0.2s">
+                <div class="flex flex-col items-center text-center">
+                    <i class="fas fa-store text-4xl mb-4 text-blue-400"></i>
+                    <h3 class="text-xl font-bold mb-2">Marketplace</h3>
+                    <p class="text-gray-300">Trade and purchase items</p>
+                </div>
+            </div>
+
+            <div id="profile-card" class="card card-hover p-6 rounded-xl animate__animated animate__fadeInUp" style="animation-delay: 0.4s">
+                <div class="flex flex-col items-center text-center">
+                    <i class="fas fa-user-astronaut text-4xl mb-4 text-green-400"></i>
+                    <h3 class="text-xl font-bold mb-2">Profile</h3>
+                    <p class="text-gray-300">Customize your avatar</p>
+                </div>
+            </div>
+
+            <div id="quests-card" class="card card-hover p-6 rounded-xl animate__animated animate__fadeInUp" style="animation-delay: 0.6s">
+                <div class="flex flex-col items-center text-center">
+                    <i class="fas fa-dragon text-4xl mb-4 text-purple-400"></i>
+                    <h3 class="text-xl font-bold mb-2">Quests</h3>
+                    <p class="text-gray-300">Embark on adventures</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize particles.js
+        particlesJS('particles-js', {
+            particles: {
+                number: { value: 80, density: { enable: true, value_area: 800 } },
+                color: { value: '#ffffff' },
+                shape: { type: 'circle' },
+                opacity: { value: 0.5, random: false },
+                size: { value: 3, random: true },
+                line_linked: {
+                    enable: true,
+                    distance: 150,
+                    color: '#ffffff',
+                    opacity: 0.4,
+                    width: 1
+                },
+                move: {
+                    enable: true,
+                    speed: 2,
+                    direction: 'none',
+                    random: false,
+                    straight: false,
+                    out_mode: 'out',
+                    bounce: false,
+                }
+            },
+            interactivity: {
+                detect_on: 'canvas',
+                events: {
+                    onhover: { enable: true, mode: 'repulse' },
+                    onclick: { enable: true, mode: 'push' },
+                    resize: true
+                }
+            },
+            retina_detect: true
+        });
+
+        // Initial data
+        let tokenBalance = 1000;
+        let usageDetails = [
+            { week: "2024-10-01", minutes: 150 },
+            { week: "2024-10-08", minutes: 175 },
+            { week: "2024-10-15", minutes: 120 },
+            { week: "2024-10-22", minutes: 200 },
+        ];
+
+        // GSAP Animations
+        function animateCard(element) {
+            gsap.to(element, {
+                scale: 1.05,
+                duration: 0.3,
+                ease: "power2.out"
+            });
+        }
+
+        function resetCard(element) {
+            gsap.to(element, {
+                scale: 1,
+                duration: 0.3,
+                ease: "power2.out"
+            });
+        }
+
+        // Update UI with animations
+        function updateUI() {
+            // Animate token balance
+            gsap.to("#token-balance", {
+                textContent: tokenBalance,
+                duration: 2,
+                snap: { textContent: 1 },
+                stagger: 1,
+                ease: "power1.in",
+                onUpdate: function() {
+                    document.getElementById("token-balance").textContent = 
+                        Math.round(this.targets()[0].textContent) + " Zen";
+                }
+            });
+
+            // Populate usage details table with animation
+            const usageTable = document.getElementById("usage-details");
+            usageTable.innerHTML = "";
+            usageDetails.forEach((detail, index) => {
+                const row = document.createElement("tr");
+                row.classList.add("text-gray-300", "hover:bg-white", "hover:bg-opacity-10", "transition-colors");
+                row.innerHTML = `
+                    <td class="p-4">${detail.week}</td>
+                    <td class="p-4">${detail.minutes} min</td>
+                `;
+                usageTable.appendChild(row);
+                
+                gsap.from(row, {
+                    opacity: 0,
+                    y: 20,
+                    delay: index * 0.1,
+                    duration: 0.5,
+                    ease: "power2.out"
+                });
+            });
+        }
+
+        // Event listeners for cards
+                // Main dashboard.js
+document.addEventListener('DOMContentLoaded', function() {
+    // Get the leaderboard card element
+    const leaderboardCard = document.getElementById('leaderboard-card');
+    const marketplaceCard = document.getElementById('marketplace-card');
+    const profileCard = document.getElementById('profile-card');
+    const questsCard = document.getElementById('quests-card');
+
+    // Add click event listener to the leaderboard card
+    leaderboardCard.addEventListener('click', function() {
+        // Add a fade-out animation before navigation
+        leaderboardCard.classList.remove('animate__fadeInUp');
+        leaderboardCard.classList.add('animate__animated', 'animate__fadeOut');
+
+        // Wait for animation to complete before navigating
+        setTimeout(() => {
+            // Navigate directly to leaderboard.html
+            window.location.href = '/leaderboard';
+        }, 500); // 500ms matches animate.css default duration
+    });
+
+    // Add click event listener to the marketplace card
+    marketplaceCard.addEventListener('click', function() {
+        // Add a fade-out animation before navigation
+        marketplaceCard.classList.remove('animate__fadeInUp');
+        marketplaceCard.classList.add('animate__animated', 'animate__fadeOut');
+
+        // Wait for animation to complete before navigating
+        setTimeout(() => {
+            // Navigate directly to marketplace.html
+            window.location.href = '/marketplace';
+        }, 500);
+    });
+
+    // Add click event listener to the profile card
+    profileCard.addEventListener('click', function() {
+        // Add a fade-out animation before navigation
+        profileCard.classList.remove('animate__fadeInUp');
+        profileCard.classList.add('animate__animated', 'animate__fadeOut');
+
+        // Wait for animation to complete before navigating
+        setTimeout(() => {
+            // Navigate directly to profile.html
+            window.location.href = '/profile';
+        }, 500);
+    });
+
+    // Add click event listener to the quests card
+    questsCard.addEventListener('click', function() {
+        // Add a fade-out animation before navigation
+        questsCard.classList.remove('animate__fadeInUp');
+        questsCard.classList.add('animate__animated', 'animate__fadeOut');
+
+        // Wait for animation to complete before navigating
+        setTimeout(() => {
+            // Navigate directly to quests.html
+            window.location.href = '/quest';
+        }, 500);
+    });
+
+    // Add hover effect for better UX
+    leaderboardCard.addEventListener('mouseenter', function() {
+        this.style.transform = 'translateY(-5px)';
+        this.style.transition = 'transform 0.3s ease';
+    });
+
+    leaderboardCard.addEventListener('mouseleave', function() {
+        this.style.transform = 'translateY(0)';
+    });
+
+    marketplaceCard.addEventListener('mouseenter', function() {
+        this.style.transform = 'translateY(-5px)';
+        this.style.transition = 'transform 0.3s ease';
+    });
+
+    marketplaceCard.addEventListener('mouseleave', function() {
+        this.style.transform = 'translateY(0)';
+    });
+
+    profileCard.addEventListener('mouseenter', function() {
+        this.style.transform = 'translateY(-5px)';
+        this.style.transition = 'transform 0.3s ease';
+    });
+
+    profileCard.addEventListener('mouseleave', function() {
+        this.style.transform = 'translateY(0)';
+    });
+
+    questsCard.addEventListener('mouseenter', function() {
+        this.style.transform = 'translateY(-5px)';
+        this.style.transition = 'transform 0.3s ease';
+    });
+
+    questsCard.addEventListener('mouseleave', function() {
+        this.style.transform = 'translateY(0)';
+    });
+});
+
+        // Initialize
+        document.addEventListener("DOMContentLoaded", () => {
+            updateUI();
+            
+            // Animate cards on load
+            gsap.from(".card", {
+                duration: 1,
+                y: 100,
+                opacity: 0,
+                stagger: 0.2,
+                ease: "power3.out"
+            });
+        });
+    </script>
+</body>
+</html>

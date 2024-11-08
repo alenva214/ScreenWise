@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marketplace - Discount Coupons</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+
+    <style>
+        #particles-js {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(to right bottom, #1a1c2c, #4a2c4c);
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .zen-coin {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .scratch-area {
+            position: relative;
+            background: #f0f0f0;
+            cursor: pointer;
+        }
+
+        .scratch-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #888, #666);
+            transition: opacity 0.3s;
+        }
+
+        .scratch-overlay.scratched {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .scratch-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #333;
+            font-weight: bold;
+            pointer-events: none;
+        }
+
+        .coupon-card {
+            transition: all 0.3s ease;
+        }
+
+        .coupon-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .copy-button {
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .code-revealed .copy-button {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="min-h-screen text-white">
+    <div id="particles-js"></div>
+
+    <div class="container mx-auto p-8 relative">
+        <!-- Header Section -->
+        <div class="flex justify-between items-center mb-8 animate__animated animate__fadeInDown">
+            <h1 class="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-600">
+                Marketplace
+            </h1>
+             <button onclick="redirectToPage()">Back To Dashboard</button>
+
+    <script>
+        // JavaScript function to redirect to a new URL
+        function redirectToPage() {
+            window.location.href = "/dashboard";
+        }
+    </script>
+            <div class="flex items-center space-x-4">
+                <div id="token-container" class="flex items-center space-x-2 bg-opacity-50 bg-black p-4 rounded-lg">
+                    <div class="zen-coin">
+                        <i class="fas fa-coins text-yellow-400 text-2xl"></i>
+                    </div>
+                    <span id="token-balance" class="text-xl font-bold">1150 Zen</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Coupons Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Nike Coupon -->
+            <div class="coupon-card card p-6 rounded-xl animate__animated animate__fadeInUp">
+                <div class="flex flex-col">
+                    <div class="flex items-center mb-4">
+                        <i class="fab fa-nike text-4xl mr-3"></i>
+                        <h3 class="text-xl font-bold">Nike</h3>
+                    </div>
+                    <p class="text-gray-300 mb-4">30% off on all running shoes</p>
+                    <div class="scratch-area p-4 rounded mb-4">
+                        <div class="scratch-overlay">
+                            <span class="scratch-text">Scratch to reveal code</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <code class="bg-gray-800 px-3 py-1 rounded">NIKE30RUN</code>
+                            <button class="copy-button text-blue-400 hover:text-blue-300">
+                                <i class="far fa-copy"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <button class="purchase-btn bg-purple-600 hover:bg-purple-700 px-4 py-2 rounded-lg transition-colors">
+                        Purchase for 150 Zen
+                    </button>
+                </div>
+            </div>
+
+            <!-- Adidas Coupon -->
+            <div class="coupon-card card p-6 rounded-xl animate__animated animate__fadeInUp" style="animation-delay: 0.2s">
+                <div class="flex flex-col">
+                    <div class="flex items-center mb-4">
+                        <i class="fab fa-adobe text-4xl mr-3"></i>
+                        <h3 class="text-xl font-bold">Adidas</h3>
+                    </div>
+                    <p class="text-gray-300 mb-4">25% off on sportswear</p>
+                    <div class="scratch-area p-4 rounded mb-4">
+                        <div class="scratch-overlay">
+                            <span class="scratch-text">Scratch to reveal code</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <code class="bg-gray-800 px-3 py-1 rounded">ADIDAS25SP</code>
+                            <button class="copy-button text-blue-400 hover:text-blue-300">
+                                <i class="far fa-copy"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <button class="purchase-btn bg-purple-600 hover:bg-purple-700 px-4 py-2 rounded-lg transition-colors">
+                        Purchase for 150 Zen
+                    </button>
+                </div>
+            </div>
+
+            <!-- Puma Coupon -->
+            <div class="coupon-card card p-6 rounded-xl animate__animated animate__fadeInUp" style="animation-delay: 0.4s">
+                <div class="flex flex-col">
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-cat text-4xl mr-3"></i>
+                        <h3 class="text-xl font-bold">Puma</h3>
+                    </div>
+                    <p class="text-gray-300 mb-4">40% off on selected items</p>
+                    <div class="scratch-area p-4 rounded mb-4">
+                        <div class="scratch-overlay">
+                            <span class="scratch-text">Scratch to reveal code</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <code class="bg-gray-800 px-3 py-1 rounded">PUMA40SEL</code>
+                            <button class="copy-button text-blue-400 hover:text-blue-300">
+                                <i class="far fa-copy"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <button class="purchase-btn bg-purple-600 hover:bg-purple-700 px-4 py-2 rounded-lg transition-colors">
+                        Purchase for 150 Zen
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize particles.js
+        particlesJS('particles-js', {
+            particles: {
+                number: { value: 80, density: { enable: true, value_area: 800 } },
+                color: { value: '#ffffff' },
+                shape: { type: 'circle' },
+                opacity: { value: 0.5, random: false },
+                size: { value: 3, random: true },
+                line_linked: {
+                    enable: true,
+                    distance: 150,
+                    color: '#ffffff',
+                    opacity: 0.4,
+                    width: 1
+                },
+                move: {
+                    enable: true,
+                    speed: 2,
+                    direction: 'none',
+                    random: false,
+                    straight: false,
+                    out_mode: 'out',
+                    bounce: false,
+                }
+            },
+            interactivity: {
+                detect_on: 'canvas',
+                events: {
+                    onhover: { enable: true, mode: 'repulse' },
+                    onclick: { enable: true, mode: 'push' },
+                    resize: true
+                }
+            },
+            retina_detect: true
+        });
+
+        // Scratch effect and purchase functionality
+     document.addEventListener('DOMContentLoaded', function() {
+    let tokenBalance = 1150;
+    const tokenDisplay = document.getElementById('token-balance');
+    
+    // Track purchased state for each coupon card
+    const purchaseStates = new Map();
+    
+    // Handle copy functionality
+    document.querySelectorAll('.copy-button').forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const code = this.parentElement.querySelector('code').textContent;
+            navigator.clipboard.writeText(code);
+            
+            // Show copied notification
+            showNotification('Copied!', 'green');
+        });
+    });
+
+    // Handle scratch area clicks
+    document.querySelectorAll('.scratch-area').forEach(area => {
+        area.addEventListener('click', function(e) {
+            const couponCard = this.closest('.coupon-card');
+            const cardId = Array.from(document.querySelectorAll('.coupon-card')).indexOf(couponCard);
+            
+            // Only allow scratching if the coupon is purchased
+            if (purchaseStates.get(cardId)) {
+                if (!this.querySelector('.scratch-overlay').classList.contains('scratched')) {
+                    this.querySelector('.scratch-overlay').classList.add('scratched');
+                    couponCard.classList.add('code-revealed');
+                }
+            } else {
+                showNotification('Purchase the coupon to reveal the code!', 'red');
+            }
+        });
+    });
+
+    // Handle purchase functionality
+    document.querySelectorAll('.purchase-btn').forEach((button, index) => {
+        button.addEventListener('click', function() {
+            if (tokenBalance >= 150 && !purchaseStates.get(index)) {
+                // Animate token reduction
+                gsap.to(tokenDisplay, {
+                    textContent: tokenBalance - 150,
+                    duration: 1,
+                    snap: { textContent: 1 },
+                    onUpdate: function() {
+                        tokenDisplay.textContent = Math.round(this.targets()[0].textContent) + ' Zen';
+                    },
+                    onComplete: function() {
+                        tokenBalance -= 150;
+                    }
+                });
+
+                // Update purchase state
+                purchaseStates.set(index, true);
+
+                // Update button state
+                this.textContent = 'Purchased!';
+                this.disabled = true;
+                this.classList.remove('bg-purple-600', 'hover:bg-purple-700');
+                this.classList.add('bg-green-600');
+
+                showNotification('Coupon purchased successfully! Click to reveal the code.', 'green');
+            } else if (purchaseStates.get(index)) {
+                showNotification('Coupon already purchased!', 'yellow');
+            } else {
+                showNotification('Insufficient Zen tokens!', 'red');
+            }
+        });
+    });
+
+    // Utility function for showing notifications
+    function showNotification(message, color) {
+        const notification = document.createElement('div');
+        notification.textContent = message;
+        notification.className = `fixed top-4 right-4 bg-${color}-500 text-white px-4 py-2 rounded animate__animated animate__fadeIn`;
+        document.body.appendChild(notification);
+        setTimeout(() => notification.remove(), 2000);
+    }
+});
+    </script>
+</body>
+</html>
